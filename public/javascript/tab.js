@@ -54,9 +54,28 @@ const tablature_create = async () => {
             filas[i].appendChild(celda);
         }
     });
+    document.body.addEventListener("keydown", (event) => {
+        if (event.isComposing || event.keyCode === 81) {
+            let filas = tabla.getElementsByTagName("tr");
+            for (let i = 0; i < filas.length; i++) {
+                let celda = document.createElement("td");
+                let input = document.createElement("input");
+                input.type = "text";
+                input.min = 0;
+                input.value = "";
+                input.id = "tab-input";
+                input.placeholder = "-"
+                input.maxLength = 2; // Máximo de 2 caracteres
+                celda.appendChild(input);
+                filas[i].appendChild(celda);
+            }
+        }
+        // do something
+    });
 
     // Crea el botón para generar la tablatura y agregar un event listener
     let botonTablatura = document.getElementById("tab-copy");
+    let TAB_DOC = ""
     botonTablatura.addEventListener("click", async () => {
         let filas = tabla.getElementsByTagName("tr");
         let tablatura = "";
@@ -75,6 +94,7 @@ const tablature_create = async () => {
             }
             tablatura = tablatura.slice(0, -1); // Elimina el guion al final de la fila
             tablatura += "\n"; // Agrega un salto de línea al final de cada fila
+            TAB_DOC = tablatura
         }
 
         navigator.clipboard.writeText(tablatura)
@@ -157,7 +177,7 @@ const tablature_create = async () => {
             for (let i = 0; i < filas.length; i++) {
                 let celdas = filas[i].getElementsByTagName("td");
                 for (let j = 0; j < celdas.length; j++) {
-                    let valor = "-";
+                    let valor = "";
                     celdas[j].getElementsByTagName("input")[0].value = valor;
                 }
             }
