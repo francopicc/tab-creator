@@ -1,4 +1,15 @@
 const tablature_create = async () => {
+    window.addEventListener('beforeunload', function (e) {
+
+        // Check if any of the input fields are filled
+        if (document.getElementById("tab-input").textContent == '') {
+
+            // Cancel the event and show alert that
+            // the unsaved changes would be lost
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
     // Restringir caracteres
     function restrictInput(event) {
         const allowedChars = /^[0-9\/\\hprvb]$/; // Expresión regular para los caracteres permitidos
@@ -21,7 +32,7 @@ const tablature_create = async () => {
     tabla.id = "tab";
     for (let i = 0; i < 6; i++) {
         let fila = document.createElement("tr");
-        for (let j = 0; j < 6; j++) {
+        for (let j = 0; j < 10; j++) {
             let celda = document.createElement("td");
             let input = document.createElement("input");
             input.type = "text";
@@ -49,6 +60,7 @@ const tablature_create = async () => {
             input.value = "";
             input.id = "tab-input";
             input.placeholder = "-"
+            input.addEventListener("input", restrictInput);
             input.maxLength = 2; // Máximo de 2 caracteres
             celda.appendChild(input);
             filas[i].appendChild(celda);
@@ -66,6 +78,7 @@ const tablature_create = async () => {
                 input.id = "tab-input";
                 input.placeholder = "-"
                 input.maxLength = 2; // Máximo de 2 caracteres
+                input.addEventListener("input", restrictInput);
                 celda.appendChild(input);
                 filas[i].appendChild(celda);
             }
